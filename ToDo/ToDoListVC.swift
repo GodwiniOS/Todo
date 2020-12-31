@@ -12,12 +12,7 @@ class ToDoListVC: UIViewController {
     var todolistTableView = UITableView()
     var addTaskButton = UIButton()
     var todoItemList = TodosList()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        prepareData()
-    }
-    
+
     override func viewDidLayoutSubviews() {
         prepareView()
     }
@@ -34,10 +29,10 @@ class ToDoListVC: UIViewController {
         view.addSubview(todolistTableView)
         
         // prepare ListTable
-        todolistTableView.prepareLayout(attribute: .top)
-        todolistTableView.prepareLayout(attribute: .bottom)
-        todolistTableView.prepareLayout(attribute: .leading)
-        todolistTableView.prepareLayout(attribute: .trailing)
+        todolistTableView.prepareLayout(.top)
+        todolistTableView.prepareLayout(.bottom)
+        todolistTableView.prepareLayout(.leading)
+        todolistTableView.prepareLayout(.trailing)
         todolistTableView.register(ToDoTableViewCell.self, forCellReuseIdentifier: "DefaultCell")
         todolistTableView.delegate = self
         todolistTableView.dataSource = self
@@ -48,12 +43,9 @@ class ToDoListVC: UIViewController {
         view.addSubview(addTaskButton)
         
         // prepare ListTable
-        addTaskButton.prepareLayout(attribute: .bottom,
-                                    constant: -10)
-        addTaskButton.prepareLayout(attribute: .leading,
-                                    constant: 10)
-        addTaskButton.prepareLayout(attribute: .trailing,
-                                    constant: -10)
+        addTaskButton.prepareLayout(.bottom,constant: -10)
+        addTaskButton.prepareLayout(.leading,constant: 10)
+        addTaskButton.prepareLayout(.trailing,constant: -10)
         addTaskButton.prepareHeight(constant: 60)
         addTaskButton.backgroundColor = .black
         addTaskButton.cornerRadius(constant: 10, color: .lightGray)
@@ -62,36 +54,42 @@ class ToDoListVC: UIViewController {
                                 for: .touchUpInside)
     }
     
-    private func prepareData() {
-//        todoItemList.append(ToDoModel())
-//        todoItemList.append(ToDoModel())
-//        todoItemList.append(ToDoModel())
-//        todoItemList.append(ToDoModel())
-    }
+
     
     @objc func sortTapped() {
 
-        let actionSheetController: UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-
-        let firstAction: UIAlertAction = UIAlertAction(title: "First Action", style: .default) { action -> Void in
-        }
-
-        let secondAction: UIAlertAction = UIAlertAction(title: "Second Action", style: .default) { action -> Void in
-        }
-
-        let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .cancel) { action -> Void in
-        }
-
-        // add actions
-        actionSheetController.addAction(firstAction)
-        actionSheetController.addAction(secondAction)
-        actionSheetController.addAction(cancelAction)
+        let categories: [Categories] = [.dateCreated,.dateEdited,.priority,.completed,.shedule]
         
-        actionSheetController.popoverPresentationController?.sourceView = todolistTableView
+        let actionSheetController = UIAlertController(title: "Sort Task",
+                                                      message: nil,
+                                                      preferredStyle: .actionSheet)
 
-//        present(actionSheetController, animated: true) {
-//            print("option menu presented")
-//        }
+        
+        for type in categories {
+            let action = UIAlertAction(title: type.rawValue, style: .default) { action -> Void in
+                switch type{
+                case .dateCreated:
+                    print("dfkjdfkjk")
+                default:
+                    print("dfkjdfkjk")
+                }
+            }
+            action.prepare()
+            actionSheetController.addAction(action)
+
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { action -> Void in
+        }
+        cancelAction.prepare()
+        
+
+        actionSheetController.addAction(cancelAction)
+        actionSheetController.popoverPresentationController?.sourceView = todolistTableView
+        
+        present(actionSheetController, animated: true) {
+            print("option menu presented")
+        }
     }
     
     @objc func pressed() {
@@ -106,10 +104,17 @@ class ToDoListVC: UIViewController {
                 return
             }
             self.todoItemList.addNew(text: text)
-            self.todolistTableView.reloadData()
+            self.reloadTabe()
         }
         ac.addAction(submitAction)
         present(ac, animated: true)
+    }
+    
+    func reloadTabe(){
+        UIView.transition(with: todolistTableView,
+                          duration: 0.35,
+                          options: .transitionCrossDissolve,
+                          animations: { self.todolistTableView.reloadData() })
     }
 }
 
@@ -120,7 +125,8 @@ extension ToDoListVC: UITableViewDelegate,UITableViewDataSource {
         todoItemList.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView,
+                   cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let todoItemTVC = ToDoTableViewCell()
         todoItemTVC.prepareTableViewCell()
         todoItemTVC.delegate = self
@@ -138,12 +144,11 @@ extension ToDoListVC: UITableViewDelegate,UITableViewDataSource {
 extension ToDoListVC: ToDoTVCDelegate {
     func completeButtonClicked(index: Int) {
         todoItemList.complete(index: index)
-        todolistTableView.reloadData()
-
+        reloadTabe()
     }
     
     func importantButtonClicked(index: Int) {
         todoItemList.importantTodo(index: index)
-        todolistTableView.reloadData()
+        reloadTabe()
     }
 }

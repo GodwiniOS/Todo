@@ -9,7 +9,7 @@ import UIKit
 
 extension UIView {
     
-    func prepareLayout(attribute: NSLayoutConstraint.Attribute,constant: CGFloat = 0) {
+    func prepareLayout(_ attribute: NSLayoutConstraint.Attribute,constant: CGFloat = 0) {
         
         translatesAutoresizingMaskIntoConstraints = false
         let layout = NSLayoutConstraint(item: self,

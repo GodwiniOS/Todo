@@ -19,6 +19,13 @@ struct ToDoModel {
 
 }
 
+enum Categories: String {
+    case dateCreated = "Created"
+    case dateEdited = "Last Edited"
+    case priority = "Important"
+    case completed = "Completed"
+    case shedule = "Shedule"
+}
 
 class TodosList {
     
@@ -73,5 +80,14 @@ class TodosList {
             if items[index].isDone == true { return index }
         }
         return nil
+    }
+    
+    func sortList(by type:Categories) {
+        switch type{
+        case .dateCreated:
+            print("dfkjdfkjk")
+        default:
+            print("dfkjdfkjk")
+        }
     }
 }
