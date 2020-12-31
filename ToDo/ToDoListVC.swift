@@ -11,7 +11,7 @@ class ToDoListVC: UIViewController {
 
     var todolistTableView = UITableView()
     var addTaskButton = UIButton()
-    var todoItemList = [ToDoModel]()
+    var todoItemList = TodosList()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +23,14 @@ class ToDoListVC: UIViewController {
     }
 
     private func prepareView() {
+        
+        title = "To Do List"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Sort",
+                                                            style: .plain,
+                                                            target: self,
+                                                            action: #selector(sortTapped))
+
+        
         view.addSubview(todolistTableView)
         
         // prepare ListTable
@@ -49,16 +57,41 @@ class ToDoListVC: UIViewController {
         addTaskButton.prepareHeight(constant: 60)
         addTaskButton.backgroundColor = .black
         addTaskButton.cornerRadius(constant: 10, color: .lightGray)
-        addTaskButton.setTitle("dejdj", for: .normal)
+        addTaskButton.setTitle("Add New", for: .normal)
         addTaskButton.addTarget(self, action: #selector(pressed),
                                 for: .touchUpInside)
     }
     
     private func prepareData() {
-        todoItemList.append(ToDoModel())
-        todoItemList.append(ToDoModel())
-        todoItemList.append(ToDoModel())
-        todoItemList.append(ToDoModel())
+//        todoItemList.append(ToDoModel())
+//        todoItemList.append(ToDoModel())
+//        todoItemList.append(ToDoModel())
+//        todoItemList.append(ToDoModel())
+    }
+    
+    @objc func sortTapped() {
+
+        let actionSheetController: UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+
+        let firstAction: UIAlertAction = UIAlertAction(title: "First Action", style: .default) { action -> Void in
+        }
+
+        let secondAction: UIAlertAction = UIAlertAction(title: "Second Action", style: .default) { action -> Void in
+        }
+
+        let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .cancel) { action -> Void in
+        }
+
+        // add actions
+        actionSheetController.addAction(firstAction)
+        actionSheetController.addAction(secondAction)
+        actionSheetController.addAction(cancelAction)
+        
+        actionSheetController.popoverPresentationController?.sourceView = todolistTableView
+
+//        present(actionSheetController, animated: true) {
+//            print("option menu presented")
+//        }
     }
     
     @objc func pressed() {
@@ -72,17 +105,11 @@ class ToDoListVC: UIViewController {
             guard let text = ac.textFields![0].text,!text.isEmpty else {
                 return
             }
-            self.addTask(text: text)
+            self.todoItemList.addNew(text: text)
+            self.todolistTableView.reloadData()
         }
         ac.addAction(submitAction)
         present(ac, animated: true)
-    }
-    
-    
-    private func addTask(text: String) {
-        let todoItem = ToDoModel(title: text)
-        todoItemList.insert(todoItem, at: 0)
-        todolistTableView.reloadData()
     }
 }
 
@@ -97,12 +124,12 @@ extension ToDoListVC: UITableViewDelegate,UITableViewDataSource {
         let todoItemTVC = ToDoTableViewCell()
         todoItemTVC.prepareTableViewCell()
         todoItemTVC.delegate = self
-        todoItemTVC.prepareData(todoItem: todoItemList[indexPath.row], index: indexPath.row)
+        todoItemTVC.prepareData(todoItem: todoItemList.items[indexPath.row], index: indexPath.row)
         return todoItemTVC
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(indexPath.row)
+        navigationController?.pushViewController(ItemDetailsVC(), animated: true)
     }
 }
 
@@ -110,13 +137,13 @@ extension ToDoListVC: UITableViewDelegate,UITableViewDataSource {
 
 extension ToDoListVC: ToDoTVCDelegate {
     func completeButtonClicked(index: Int) {
-        todoItemList[index].isDone = !todoItemList[index].isDone
+        todoItemList.complete(index: index)
         todolistTableView.reloadData()
 
     }
     
     func importantButtonClicked(index: Int) {
-        todoItemList[index].isImportant = !todoItemList[index].isImportant
+        todoItemList.importantTodo(index: index)
         todolistTableView.reloadData()
     }
 }

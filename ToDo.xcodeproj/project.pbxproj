@@ -18,6 +18,7 @@
 		5AD8CA5C259DD3BF005B79CC /* LabelEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AD8CA5B259DD3BF005B79CC /* LabelEx.swift */; };
 		5AD8CA5F259DE066005B79CC /* ViewEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AD8CA5E259DE066005B79CC /* ViewEx.swift */; };
 		5AD8CA65259DFD29005B79CC /* ButtonEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AD8CA64259DFD29005B79CC /* ButtonEx.swift */; };
+		5AD8CA68259E246E005B79CC /* ItemDetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AD8CA67259E246E005B79CC /* ItemDetailsVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		5AD8CA5B259DD3BF005B79CC /* LabelEx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelEx.swift; sourceTree = "<group>"; };
 		5AD8CA5E259DE066005B79CC /* ViewEx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewEx.swift; sourceTree = "<group>"; };
 		5AD8CA64259DFD29005B79CC /* ButtonEx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonEx.swift; sourceTree = "<group>"; };
+		5AD8CA67259E246E005B79CC /* ItemDetailsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDetailsVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +72,7 @@
 				5AD8CA4F259DCFC6005B79CC /* CustomUI */,
 				5AD8CA49259DB356005B79CC /* ToDoModel.swift */,
 				5AD8CA30259DAE8A005B79CC /* ToDoListVC.swift */,
+				5AD8CA67259E246E005B79CC /* ItemDetailsVC.swift */,
 				5AD8CA45259DB118005B79CC /* ToDoTableViewCell.swift */,
 				5AD8CA32259DAE8A005B79CC /* Main.storyboard */,
 				5AD8CA35259DAE91005B79CC /* Assets.xcassets */,
@@ -174,6 +177,7 @@
 				5AD8CA4A259DB356005B79CC /* ToDoModel.swift in Sources */,
 				5AD8CA2F259DAE8A005B79CC /* SceneDelegate.swift in Sources */,
 				5AD8CA46259DB118005B79CC /* ToDoTableViewCell.swift in Sources */,
+				5AD8CA68259E246E005B79CC /* ItemDetailsVC.swift in Sources */,
 				5AD8CA5F259DE066005B79CC /* ViewEx.swift in Sources */,
 				5AD8CA5C259DD3BF005B79CC /* LabelEx.swift in Sources */,
 			);

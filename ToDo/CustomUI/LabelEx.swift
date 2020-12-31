@@ -38,4 +38,10 @@ extension UILabel{
                            size: FontSize.title.rawValue)
         textColor = .black
     }
+    
+    func strikeThrough() {
+        let attrString = NSAttributedString(string: text ?? "", attributes: [NSAttributedString.Key.strikethroughStyle: NSUnderlineStyle.single.rawValue])
+        attributedText = attrString
+        textColor = .gray
+    }
 }

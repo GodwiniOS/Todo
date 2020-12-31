@@ -84,13 +84,16 @@ class ToDoTableViewCell: UITableViewCell {
                                      constant: 60)
         titleLabel.prepareLayout(attribute: .top,
                                      constant: 10)
+        
+        titleLabel.prepareLayout(attribute: .trailing,
+                                 constant: -60)
         titleLabel.prepareTextField()
     }
     
     func prepareData(todoItem: ToDoModel,index: Int){
-//        print(todoItem)
         self.index = index
         titleLabel.text = todoItem.title
+        if todoItem.isDone { titleLabel.strikeThrough() }
         completedButton.setImage(name: todoItem.isDone ? .completed : .complete)
         importantButton.setImage(name: todoItem.isImportant ? .importance : .importatant)
 
