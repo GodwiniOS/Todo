@@ -7,6 +7,14 @@
 
 import UIKit
 
+
+protocol ToDoTVCDelegate {
+    func completeButtonClicked(index: Int)
+    func importantButtonClicked(index: Int)
+}
+
+
+
 class ToDoTableViewCell: UITableViewCell {
 
     let backGroundView = UIView()
@@ -14,12 +22,17 @@ class ToDoTableViewCell: UITableViewCell {
     let subTitlelabel = UILabel()
     let completedButton = UIButton()
     let importantButton = UIButton()
+    var index : Int!
+    
+    var delegate : ToDoTVCDelegate?
 
+    
     func prepareTableViewCell() {
         
         
         // prepare Background
         backgroundColor = .clear
+        selectionStyle = .none
         contentView.backgroundColor = .clear
         contentView.superview?.backgroundColor = .clear
         contentView.prepareHeight(constant: 60)
@@ -45,22 +58,9 @@ class ToDoTableViewCell: UITableViewCell {
                                      constant: 10)
         completedButton.prepareHeight(constant: 30)
         completedButton.prepareWidth(constant: 30)
-        
-        
-//        addButton.setImage(UIImage(with: .ADDICON), for: UIControl.State.normal)
-
-        
-        
-        
-        if #available(iOS 13.0, *) {
-            let boldConfig = UIImage.SymbolConfiguration(weight: .bold)
-            let boldSearch = UIImage(systemName: "search", withConfiguration: boldConfig)
-
-            importantButton.setImage(boldSearch, for: .normal)
-        } else {
-        }
-
-        
+        completedButton.setImage(name: .complete)
+        completedButton.addTarget(self, action: #selector(completeTapped),
+                                for: .touchUpInside)
         
         
 
@@ -73,9 +73,9 @@ class ToDoTableViewCell: UITableViewCell {
                                      constant: 10)
         importantButton.prepareHeight(constant: 30)
         importantButton.prepareWidth(constant: 30)
-        importantButton.backgroundColor = .lightGray
-//        importantButton.setImage(UIImage(systemName: "paperplane.fill"), for: .normal)
-
+        importantButton.setImage(name: .importatant)
+        importantButton.addTarget(self, action: #selector(importantTapped),
+                                for: .touchUpInside)
         
         
         // prepare Title label
@@ -85,10 +85,22 @@ class ToDoTableViewCell: UITableViewCell {
         titleLabel.prepareLayout(attribute: .top,
                                      constant: 10)
         titleLabel.prepareTextField()
-        titleLabel.text = "fnjknkf"
+    }
+    
+    func prepareData(todoItem: ToDoModel,index: Int){
+//        print(todoItem)
+        self.index = index
+        titleLabel.text = todoItem.title
+        completedButton.setImage(name: todoItem.isDone ? .completed : .complete)
+        importantButton.setImage(name: todoItem.isImportant ? .importance : .importatant)
+
+    }
+    
+    @objc func completeTapped() {
+        delegate?.completeButtonClicked(index: index)
+    }
         
-//        backGroundView.addSubview(subTitlelabel)
-//        backGroundView.addSubview(completedButton)
-//        backGroundView.addSubview(importantButton)
+    @objc func importantTapped() {
+        delegate?.importantButtonClicked(index: index)
     }
 }

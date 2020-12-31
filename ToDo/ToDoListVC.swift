@@ -47,7 +47,7 @@ class ToDoListVC: UIViewController {
         addTaskButton.prepareLayout(attribute: .trailing,
                                     constant: -10)
         addTaskButton.prepareHeight(constant: 60)
-        addTaskButton.backgroundColor = .lightGray
+        addTaskButton.backgroundColor = .black
         addTaskButton.cornerRadius(constant: 10, color: .lightGray)
         addTaskButton.setTitle("dejdj", for: .normal)
         addTaskButton.addTarget(self, action: #selector(pressed),
@@ -62,17 +62,27 @@ class ToDoListVC: UIViewController {
     }
     
     @objc func pressed() {
-        let ac = UIAlertController(title: "Enter answer", message: nil, preferredStyle: .alert)
+        
+        let ac = UIAlertController(title: "Enter answer",
+                                   message: nil,
+                                   preferredStyle: .alert)
         ac.addTextField()
 
         let submitAction = UIAlertAction(title: "Submit", style: .default) { [unowned ac] _ in
-            let answer = ac.textFields![0]
-            // do something interesting with "answer" here
+            guard let text = ac.textFields![0].text,!text.isEmpty else {
+                return
+            }
+            self.addTask(text: text)
         }
-
         ac.addAction(submitAction)
-
         present(ac, animated: true)
+    }
+    
+    
+    private func addTask(text: String) {
+        let todoItem = ToDoModel(title: text)
+        todoItemList.insert(todoItem, at: 0)
+        todolistTableView.reloadData()
     }
 }
 
@@ -86,10 +96,27 @@ extension ToDoListVC: UITableViewDelegate,UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let todoItemTVC = ToDoTableViewCell()
         todoItemTVC.prepareTableViewCell()
+        todoItemTVC.delegate = self
+        todoItemTVC.prepareData(todoItem: todoItemList[indexPath.row], index: indexPath.row)
         return todoItemTVC
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print(indexPath.row)
     }
 }
 
 
 
+extension ToDoListVC: ToDoTVCDelegate {
+    func completeButtonClicked(index: Int) {
+        todoItemList[index].isDone = !todoItemList[index].isDone
+        todolistTableView.reloadData()
 
+    }
+    
+    func importantButtonClicked(index: Int) {
+        todoItemList[index].isImportant = !todoItemList[index].isImportant
+        todolistTableView.reloadData()
+    }
+}

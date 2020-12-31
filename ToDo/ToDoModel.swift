@@ -7,7 +7,7 @@
 
 import Foundation
 
-class ToDoModel {
+struct ToDoModel {
     
     var title: String = "New"
     var subtitle: String = "New"

@@ -22,12 +22,12 @@ enum FontName: String {
 }
 
 
-enum UImageName: String {
+enum AppImage: String {
     
-    case importance = "importance"
-    case importatant    = "importatant"
-    case completed      = "completed"
-    case complete       = "complete"
+    case importance = "Importance"
+    case importatant    = "Importatant"
+    case completed      = "Completed"
+    case complete       = "Complete"
 }
 
 
