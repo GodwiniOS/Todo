@@ -37,6 +37,7 @@ class ToDoTableViewCell: UITableViewCell {
         contentView.superview?.backgroundColor = .clear
         contentView.prepareHeight(constant: 60)
         contentView.addSubview(backGroundView)
+        
         backGroundView.prepareLayout(.leading,constant: 10)
         backGroundView.prepareLayout(.trailing,constant: -10)
         backGroundView.prepareLayout(.top,constant: 5)
@@ -70,19 +71,26 @@ class ToDoTableViewCell: UITableViewCell {
         // prepare Title label
         backGroundView.addSubview(titleLabel)
         titleLabel.prepareLayout(.leading,constant: 60)
-        titleLabel.prepareLayout(.top,constant: 10)
-        
+        titleLabel.prepareLayout(.top,constant: 8)
         titleLabel.prepareLayout(.trailing,constant: -60)
-        titleLabel.prepareTextField()
+        titleLabel.prepareTextField(size: .title)
+        
+        // prepare Title label
+        backGroundView.addSubview(subTitlelabel)
+        subTitlelabel.prepareLayout(.leading,constant: 60)
+        subTitlelabel.prepareLayout(.bottom,constant: -8)
+        subTitlelabel.prepareLayout(.trailing,constant: -60)
+        subTitlelabel.prepareTextField(size: .subtite)
     }
     
     func prepareData(todoItem: ToDoModel,index: Int){
         self.index = index
         titleLabel.text = todoItem.title
         if todoItem.isDone { titleLabel.strikeThrough() }
+        subTitlelabel.text = todoItem.lastEditedTime.time()
+        subTitlelabel.isHidden = todoItem.isDone
         completedButton.setImage(name: todoItem.isDone ? .completed : .complete)
         importantButton.setImage(name: todoItem.isImportant ? .importance : .importatant)
-
     }
     
     @objc func completeTapped() {

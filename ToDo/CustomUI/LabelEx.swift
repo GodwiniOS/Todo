@@ -9,8 +9,8 @@ import UIKit
 
 enum FontSize: CGFloat {
     
-    case title = 32
-    case subtite = 16
+    case title = 16
+    case subtite = 10
 }
 
 enum FontName: String {
@@ -33,9 +33,8 @@ enum AppImage: String {
 
 extension UILabel{
 
-    func prepareTextField() {
-        font = UIFont(name: FontName.Regular.rawValue,
-                           size: FontSize.title.rawValue)
+    func prepareTextField(size: FontSize) {
+        font = font.withSize(size.rawValue)
         textColor = .black
     }
     

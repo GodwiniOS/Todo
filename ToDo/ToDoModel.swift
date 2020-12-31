@@ -15,7 +15,7 @@ struct ToDoModel {
     var isImportant: Bool = false
     var createdTime: Date = Date()
     var lastEditedTime: Date = Date()
-    var sheduleTime: Date?
+    var sheduleTime: Date = Date()
 
 }
 
@@ -25,19 +25,26 @@ enum Categories: String {
     case priority = "Important"
     case completed = "Completed"
     case shedule = "Shedule"
+    case normal = "Cancel"
+}
+
+protocol kkk {
+    func kkk()
 }
 
 class TodosList {
     
+    var delegate : kkk?
     var items = [ToDoModel]()
     var count: Int {
         return items.count
     }
+    var sortType: Categories = .normal
     
     func addNew(text: String) {
         let todoItem = ToDoModel(title: text)
         items.insert(todoItem, at: 0)
-        print(todoItem)
+        sortType = .normal
     }
     
     func importantTodo(index: Int) {
@@ -51,7 +58,6 @@ class TodosList {
             items.remove(at: index)
             items.insert(item, at: findImportantIndex() ?? 0)
         }
-        
     }
     
     func complete(index: Int) {
@@ -68,14 +74,14 @@ class TodosList {
         }
     }
     
-    func findImportantIndex() -> Int? {
+    private func findImportantIndex() -> Int? {
         for index in 0..<items.count {
             if items[index].isImportant == true { return index }
         }
         return nil
     }
     
-    func findCompletedIndex() -> Int? {
+    private func findCompletedIndex() -> Int? {
         for index in 0..<items.count {
             if items[index].isDone == true { return index }
         }
@@ -83,11 +89,23 @@ class TodosList {
     }
     
     func sortList(by type:Categories) {
+        var list = items
         switch type{
         case .dateCreated:
-            print("dfkjdfkjk")
-        default:
-            print("dfkjdfkjk")
+            list.sort { $0.createdTime < $1.createdTime }
+        case .dateEdited:
+            list.sort { $0.lastEditedTime > $1.lastEditedTime }
+        case .completed:
+            list.sort { $0.isDone && !$1.isDone }
+        case .priority:
+            list.sort { $0.isImportant && !$1.isImportant }
+        case .shedule:
+            list.sort { $0.sheduleTime  < $1.sheduleTime }
+        default: print("")
         }
+        
+        items = list
+        sortType = type
+        delegate?.kkk()
     }
 }

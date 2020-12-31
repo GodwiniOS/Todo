@@ -74,6 +74,7 @@
 				5AD8CA4F259DCFC6005B79CC /* CustomUI */,
 				5AD8CA6D259E42DA005B79CC /* Model */,
 				5AD8CA30259DAE8A005B79CC /* ToDoListVC.swift */,
+				5AD8CA49259DB356005B79CC /* ToDoModel.swift */,
 				5AD8CA67259E246E005B79CC /* ItemDetailsVC.swift */,
 				5AD8CA45259DB118005B79CC /* ToDoTableViewCell.swift */,
 				5AD8CA32259DAE8A005B79CC /* Main.storyboard */,
@@ -107,7 +108,6 @@
 		5AD8CA6D259E42DA005B79CC /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				5AD8CA49259DB356005B79CC /* ToDoModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";

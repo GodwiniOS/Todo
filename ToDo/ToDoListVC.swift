@@ -52,13 +52,16 @@ class ToDoListVC: UIViewController {
         addTaskButton.setTitle("Add New", for: .normal)
         addTaskButton.addTarget(self, action: #selector(pressed),
                                 for: .touchUpInside)
+        
+        
+        todoItemList.delegate = self
     }
     
 
     
     @objc func sortTapped() {
 
-        let categories: [Categories] = [.dateCreated,.dateEdited,.priority,.completed,.shedule]
+        let categories: [Categories] = [.dateCreated,.dateEdited,.priority,.completed,.shedule,.normal]
         
         let actionSheetController = UIAlertController(title: "Sort Task",
                                                       message: nil,
@@ -66,30 +69,19 @@ class ToDoListVC: UIViewController {
 
         
         for type in categories {
-            let action = UIAlertAction(title: type.rawValue, style: .default) { action -> Void in
-                switch type{
-                case .dateCreated:
-                    print("dfkjdfkjk")
-                default:
-                    print("dfkjdfkjk")
-                }
+            let style : UIAlertAction.Style = type == .normal ? .cancel : .default
+            let action = UIAlertAction(title: type.rawValue,
+                                       style:style ) { action -> Void in
+                guard type != .normal else { return }
+                self.todoItemList.sortList(by: type)
             }
             action.prepare()
             actionSheetController.addAction(action)
-
         }
-        
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { action -> Void in
-        }
-        cancelAction.prepare()
-        
-
-        actionSheetController.addAction(cancelAction)
+    
         actionSheetController.popoverPresentationController?.sourceView = todolistTableView
         
-        present(actionSheetController, animated: true) {
-            print("option menu presented")
-        }
+        present(actionSheetController, animated: true)
     }
     
     @objc func pressed() {
@@ -149,6 +141,13 @@ extension ToDoListVC: ToDoTVCDelegate {
     
     func importantButtonClicked(index: Int) {
         todoItemList.importantTodo(index: index)
+        reloadTabe()
+    }
+}
+
+
+extension ToDoListVC: kkk {
+    func kkk() {
         reloadTabe()
     }
 }
