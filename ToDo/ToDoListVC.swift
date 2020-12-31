@@ -10,6 +10,7 @@ import UIKit
 class ToDoListVC: UIViewController {
 
     var todolistTableView = UITableView()
+    var addTaskButton = UIButton()
     var todoItemList = [ToDoModel]()
     
     override func viewDidLoad() {
@@ -32,8 +33,25 @@ class ToDoListVC: UIViewController {
         todolistTableView.register(ToDoTableViewCell.self, forCellReuseIdentifier: "DefaultCell")
         todolistTableView.delegate = self
         todolistTableView.dataSource = self
+        todolistTableView.separatorStyle = .none
 
-        todolistTableView.backgroundColor = .red
+        
+        
+        view.addSubview(addTaskButton)
+        
+        // prepare ListTable
+        addTaskButton.prepareLayout(attribute: .bottom,
+                                    constant: -10)
+        addTaskButton.prepareLayout(attribute: .leading,
+                                    constant: 10)
+        addTaskButton.prepareLayout(attribute: .trailing,
+                                    constant: -10)
+        addTaskButton.prepareHeight(constant: 60)
+        addTaskButton.backgroundColor = .lightGray
+        addTaskButton.cornerRadius(constant: 10, color: .lightGray)
+        addTaskButton.setTitle("dejdj", for: .normal)
+        addTaskButton.addTarget(self, action: #selector(pressed),
+                                for: .touchUpInside)
     }
     
     private func prepareData() {
@@ -43,7 +61,19 @@ class ToDoListVC: UIViewController {
         todoItemList.append(ToDoModel())
     }
     
-    
+    @objc func pressed() {
+        let ac = UIAlertController(title: "Enter answer", message: nil, preferredStyle: .alert)
+        ac.addTextField()
+
+        let submitAction = UIAlertAction(title: "Submit", style: .default) { [unowned ac] _ in
+            let answer = ac.textFields![0]
+            // do something interesting with "answer" here
+        }
+
+        ac.addAction(submitAction)
+
+        present(ac, animated: true)
+    }
 }
 
 
@@ -63,32 +93,3 @@ extension ToDoListVC: UITableViewDelegate,UITableViewDataSource {
 
 
 
-extension UIView {
-    
-    func prepareLayout(attribute: NSLayoutConstraint.Attribute) {
-        
-        translatesAutoresizingMaskIntoConstraints = false
-        let layout = NSLayoutConstraint(item: self,
-                                        attribute: attribute,
-                                        relatedBy: .equal,
-                                        toItem: superview,
-                                        attribute: attribute,
-                                        multiplier: 1,
-                                        constant:0)
-        NSLayoutConstraint.activate([layout])
-    }
-    
-    
-    func prepareHeight(constant: CGFloat) {
-        
-        let constraint = NSLayoutConstraint(
-            item: self,
-            attribute: .height,
-            relatedBy: .equal,
-            toItem: nil,
-            attribute: .notAnAttribute,
-            multiplier: 1.0,
-            constant: constant)
-        NSLayoutConstraint.activate([constraint])
-    }
-}
