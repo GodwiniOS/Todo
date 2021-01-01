@@ -7,8 +7,6 @@
 
 import UIKit
 
-
-
 extension UIAlertAction {
 
     func prepare(){
@@ -27,6 +25,6 @@ extension Date {
         let month = Calendar.current.component(.month, from: self)
         let year = Calendar.current.component(.year, from: self)
         
-        return "\(hour):\(minutes)    \(day)-\(month)-\(year)"
+        return "\(hour):\(minutes)  \(day)-\(month)-\(year)"
     }
 }

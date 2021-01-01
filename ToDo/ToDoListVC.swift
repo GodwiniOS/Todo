@@ -20,15 +20,15 @@ class ToDoListVC: UIViewController {
     private func prepareView() {
         
         title = "To Do List"
+        todoItemList.delegate = self
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Sort",
                                                             style: .plain,
                                                             target: self,
                                                             action: #selector(sortTapped))
+        navigationItem.rightBarButtonItem?.tintColor = .black
 
-        
-        view.addSubview(todolistTableView)
-        
         // prepare ListTable
+        view.addSubview(todolistTableView)
         todolistTableView.prepareLayout(.top)
         todolistTableView.prepareLayout(.bottom)
         todolistTableView.prepareLayout(.leading)
@@ -37,25 +37,19 @@ class ToDoListVC: UIViewController {
         todolistTableView.delegate = self
         todolistTableView.dataSource = self
         todolistTableView.separatorStyle = .none
-
-        
-        
-        view.addSubview(addTaskButton)
         
         // prepare ListTable
+        view.addSubview(addTaskButton)
         addTaskButton.prepareLayout(.bottom,constant: -10)
         addTaskButton.prepareLayout(.leading,constant: 10)
         addTaskButton.prepareLayout(.trailing,constant: -10)
         addTaskButton.prepareHeight(constant: 60)
         addTaskButton.backgroundColor = .black
-        addTaskButton.cornerRadius(constant: 10, color: .lightGray)
+        addTaskButton.cornerRadius(color: .lightGray)
         addTaskButton.setTitle("Add New", for: .normal)
         addTaskButton.addTarget(self, action: #selector(pressed),
                                 for: .touchUpInside)
-        
-        
-        todoItemList.delegate = self
-    }
+        }
     
 
     
@@ -98,13 +92,14 @@ class ToDoListVC: UIViewController {
             self.todoItemList.addNew(text: text)
             self.reloadTabe()
         }
+        submitAction.setValue(UIColor.black, forKey: "titleTextColor")
         ac.addAction(submitAction)
         present(ac, animated: true)
     }
     
     func reloadTabe(){
         UIView.transition(with: todolistTableView,
-                          duration: 0.35,
+                          duration: 0.5,
                           options: .transitionCrossDissolve,
                           animations: { self.todolistTableView.reloadData() })
     }
@@ -127,7 +122,11 @@ extension ToDoListVC: UITableViewDelegate,UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        navigationController?.pushViewController(ItemDetailsVC(), animated: true)
+        let vc = ItemDetailsVC()
+        todoItemList.items[indexPath.row].index = indexPath.row
+        vc.todoItem = todoItemList.items[indexPath.row]
+        vc.delegate = self
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 
@@ -148,6 +147,22 @@ extension ToDoListVC: ToDoTVCDelegate {
 
 extension ToDoListVC: kkk {
     func kkk() {
+        reloadTabe()
+    }
+}
+
+
+extension ToDoListVC: DetailsVCDelegate {
+    
+    func delete(item: ToDoModel) {
+        guard let index = item.index else { return }
+        todoItemList.items.remove(at: index)
+        reloadTabe()
+    }
+    
+    func saveChanges(item: ToDoModel) {
+        guard let index = item.index else { return }
+        todoItemList.saveChanges(of: item, index: index)
         reloadTabe()
     }
 }

@@ -25,11 +25,19 @@ enum FontName: String {
 enum AppImage: String {
     
     case importance = "Importance"
+    case sheduleOff = "SheduleOff"
+    case sheduleOn  = "SheduleOn"
     case importatant    = "Importatant"
     case completed      = "Completed"
     case complete       = "Complete"
 }
 
+enum AppButton: String {
+    
+    case complete
+    case important
+    case shedule
+}
 
 extension UILabel{
 
@@ -42,5 +50,20 @@ extension UILabel{
         let attrString = NSAttributedString(string: text ?? "", attributes: [NSAttributedString.Key.strikethroughStyle: NSUnderlineStyle.single.rawValue])
         attributedText = attrString
         textColor = .gray
+    }
+}
+
+
+extension UITextField{
+    func strikeThrough(enable: Bool) {
+        
+        if enable {
+            let attrString = NSAttributedString(string: text ?? "", attributes: [NSAttributedString.Key.strikethroughStyle: NSUnderlineStyle.single.rawValue])
+            attributedText = attrString
+            textColor = .gray
+        } else {
+            attributedText = NSAttributedString(string: text ?? "")
+            textColor = .black
+        }
     }
 }

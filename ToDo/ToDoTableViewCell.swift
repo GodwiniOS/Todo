@@ -8,7 +8,7 @@
 import UIKit
 
 
-protocol ToDoTVCDelegate {
+protocol ToDoTVCDelegate: AnyObject {
     func completeButtonClicked(index: Int)
     func importantButtonClicked(index: Int)
 }
@@ -22,10 +22,10 @@ class ToDoTableViewCell: UITableViewCell {
     let subTitlelabel = UILabel()
     let completedButton = UIButton()
     let importantButton = UIButton()
+    let sheduleIcon = UIImageView()
     
     var index : Int!
-    var delegate : ToDoTVCDelegate?
-
+    weak var delegate : ToDoTVCDelegate?
     
     func prepareTableViewCell() {
         
@@ -40,9 +40,9 @@ class ToDoTableViewCell: UITableViewCell {
         
         backGroundView.prepareLayout(.leading,constant: 10)
         backGroundView.prepareLayout(.trailing,constant: -10)
-        backGroundView.prepareLayout(.top,constant: 5)
-        backGroundView.prepareLayout(.bottom,constant: -5)
-        backGroundView.cornerRadius(constant: 10, color: .lightGray)
+        backGroundView.prepareLayout(.top,constant: 10)
+        backGroundView.prepareLayout(.bottom)
+        backGroundView.cornerRadius(color: .lightGray)
 
         
         // prepare completedButton
@@ -76,8 +76,16 @@ class ToDoTableViewCell: UITableViewCell {
         titleLabel.prepareTextField(size: .title)
         
         // prepare Title label
+        backGroundView.addSubview(sheduleIcon)
+        sheduleIcon.prepareLayout(.leading,constant: 60)
+        sheduleIcon.prepareLayout(.bottom,constant: -8)
+        sheduleIcon.prepareHeight(constant: 10)
+        sheduleIcon.prepareWidth(constant: 10)
+        sheduleIcon.image = UIImage(named: AppImage.sheduleOn.rawValue)
+        
+        // prepare Title label
         backGroundView.addSubview(subTitlelabel)
-        subTitlelabel.prepareLayout(.leading,constant: 60)
+        subTitlelabel.prepareLayout(.leading,constant: 80)
         subTitlelabel.prepareLayout(.bottom,constant: -8)
         subTitlelabel.prepareLayout(.trailing,constant: -60)
         subTitlelabel.prepareTextField(size: .subtite)
@@ -87,8 +95,9 @@ class ToDoTableViewCell: UITableViewCell {
         self.index = index
         titleLabel.text = todoItem.title
         if todoItem.isDone { titleLabel.strikeThrough() }
-        subTitlelabel.text = todoItem.lastEditedTime.time()
-        subTitlelabel.isHidden = todoItem.isDone
+        subTitlelabel.text = todoItem.sheduleTime.time()
+        subTitlelabel.isHidden = !todoItem.isSheduled
+        sheduleIcon.isHidden = !todoItem.isSheduled
         completedButton.setImage(name: todoItem.isDone ? .completed : .complete)
         importantButton.setImage(name: todoItem.isImportant ? .importance : .importatant)
     }

@@ -97,8 +97,8 @@
 		5AD8CA4F259DCFC6005B79CC /* CustomUI */ = {
 			isa = PBXGroup;
 			children = (
-				5AD8CA5B259DD3BF005B79CC /* LabelEx.swift */,
 				5AD8CA5E259DE066005B79CC /* ViewEx.swift */,
+				5AD8CA5B259DD3BF005B79CC /* LabelEx.swift */,
 				5AD8CA64259DFD29005B79CC /* ButtonEx.swift */,
 				5AD8CA6A259E404F005B79CC /* AlertActionEx.swift */,
 			);

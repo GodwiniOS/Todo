@@ -50,7 +50,7 @@ extension UIView {
     }
     
     
-    func cornerRadius(constant: CGFloat,color: UIColor,
+    func cornerRadius(constant: CGFloat = 10,color: UIColor,
                       width: CGFloat = 1){
         layer.cornerRadius = constant;
         layer.masksToBounds = true;
