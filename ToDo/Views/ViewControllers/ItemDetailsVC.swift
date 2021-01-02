@@ -58,6 +58,7 @@ class ItemDetailsVC: UIViewController{
         backgroundView.prepareLayout(.trailing)
         backgroundView.backgroundColor = .white
         navigationController?.navigationBar.tintColor = .black
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
 
         // prepare ListTable
         backgroundView.addSubview(deletebutton)
@@ -118,17 +119,11 @@ class ItemDetailsVC: UIViewController{
         lastEditedLabel.prepareTextField(size: .title)
                 
         // Date
+        backgroundView.addSubview(datePicker)
         datePicker.locale = .current
         datePicker.datePickerMode = .dateAndTime
-
         datePicker.addTarget(self, action: #selector(timeChanged), for: .valueChanged)
-
-        backgroundView.addSubview(datePicker)
         datePicker.prepareLayout(.leading,constant: 10)
-        
-        datePicker.setValue(UIColor.red, forKeyPath: "textColor")
-        datePicker.setValue(UIColor.red, forKeyPath: "textColor")
-
         datePicker.prepareLayout(.top,toItem: lastEditedLabel,constant: 30)
     }
 
@@ -145,8 +140,8 @@ class ItemDetailsVC: UIViewController{
         importantButton.changeState(button: .Important,isEnable: !data.isImportant)
         sheduleButton.changeState(button: .Shedule,isEnable: !data.isSheduled)
 
-        createdLabel.text = "Creadted " + data.createdTime.time()
-        lastEditedLabel.text = "Last Edited " + data.lastEditedTime.time()
+        createdLabel.text =    "Creadted     " + data.createdTime.time()
+        lastEditedLabel.text = "Last Edited  " + data.lastEditedTime.time()
     }
     
     
@@ -201,6 +196,7 @@ class ItemDetailsVC: UIViewController{
             sheduleButton.changeState(button: .Shedule, isEnable: false)
 
         } else {
+            todoItem.sheduleTime = todoItem.createdTime
             sheduleButton.changeState(button: .Shedule, isEnable: true)
         }
         todoItem.isSheduled = !todoItem.isSheduled

@@ -17,9 +17,10 @@ class TodosListVM {
     weak var delegate : TodosListDelegate?
     var items = [ToDoModel]()
     var count: Int { return items.count }
-    var isEmpty: Bool { return items.isEmpty }
+    var canSort: Bool { return items.count < 2 }
     var sortType: Categories = .Normal
-    
+    let sortCategories: [Categories] = [.Priority,.Completed,.Shedule,.Normal,.DateCreated,.DateEdited]
+
     func addNew(text: String) {
         let todoItem = ToDoModel(title: text)
         items.insert(todoItem, at: 0)
@@ -27,6 +28,7 @@ class TodosListVM {
     }
     
     func makeImportant(index: Int) {
+        sortType = .Normal
         var item = items[index]
         if item.isImportant {
             items[index].isImportant = false
@@ -40,6 +42,7 @@ class TodosListVM {
     }
     
     func makeComplete(index: Int) {
+        sortType = .Normal
         var item = items[index]
         if item.isDone {
             items[index].isDone = false
@@ -68,6 +71,7 @@ class TodosListVM {
     }
     
     func sortList(by type:Categories) {
+        
         var list = items
         switch type{
         case .DateCreated:
@@ -79,7 +83,7 @@ class TodosListVM {
         case .Priority:
             list.sort { $0.isImportant && !$1.isImportant }
         case .Shedule:
-            list.sort { $0.sheduleTime  < $1.sheduleTime }
+            list.sort { $0.sheduleTime  > $1.sheduleTime }
         default: print("")
         }
         

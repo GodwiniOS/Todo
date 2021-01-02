@@ -11,6 +11,7 @@
 		5AA7CFCB25A05297004B2FD1 /* TodoListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA7CFCA25A05297004B2FD1 /* TodoListVM.swift */; };
 		5AA7CFDC25A09675004B2FD1 /* TableEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA7CFDB25A09675004B2FD1 /* TableEx.swift */; };
 		5AA7CFDF25A09FA9004B2FD1 /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA7CFDE25A09FA9004B2FD1 /* TextField.swift */; };
+		5AA7CFE225A0B531004B2FD1 /* ViewControllerEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA7CFE125A0B531004B2FD1 /* ViewControllerEx.swift */; };
 		5AD8CA2D259DAE8A005B79CC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AD8CA2C259DAE8A005B79CC /* AppDelegate.swift */; };
 		5AD8CA2F259DAE8A005B79CC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AD8CA2E259DAE8A005B79CC /* SceneDelegate.swift */; };
 		5AD8CA31259DAE8A005B79CC /* ToDoListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AD8CA30259DAE8A005B79CC /* ToDoListVC.swift */; };
@@ -31,6 +32,7 @@
 		5AA7CFCA25A05297004B2FD1 /* TodoListVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListVM.swift; sourceTree = "<group>"; };
 		5AA7CFDB25A09675004B2FD1 /* TableEx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableEx.swift; sourceTree = "<group>"; };
 		5AA7CFDE25A09FA9004B2FD1 /* TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
+		5AA7CFE125A0B531004B2FD1 /* ViewControllerEx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerEx.swift; sourceTree = "<group>"; };
 		5AD8CA29259DAE8A005B79CC /* ToDo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToDo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AD8CA2C259DAE8A005B79CC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5AD8CA2E259DAE8A005B79CC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -159,6 +161,7 @@
 				5AD8CA6A259E404F005B79CC /* AlertActionEx.swift */,
 				5AA7CFDB25A09675004B2FD1 /* TableEx.swift */,
 				5AA7CFDE25A09FA9004B2FD1 /* TextField.swift */,
+				5AA7CFE125A0B531004B2FD1 /* ViewControllerEx.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -244,6 +247,7 @@
 			files = (
 				5AD8CA31259DAE8A005B79CC /* ToDoListVC.swift in Sources */,
 				5AD8CA2D259DAE8A005B79CC /* AppDelegate.swift in Sources */,
+				5AA7CFE225A0B531004B2FD1 /* ViewControllerEx.swift in Sources */,
 				5AD8CA65259DFD29005B79CC /* ButtonEx.swift in Sources */,
 				5AA7CFDF25A09FA9004B2FD1 /* TextField.swift in Sources */,
 				5AA7CFC825A04953004B2FD1 /* AppConstants.swift in Sources */,

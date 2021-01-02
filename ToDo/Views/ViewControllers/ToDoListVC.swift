@@ -12,23 +12,22 @@ class ToDoListVC: UIViewController {
     var todolistTableView = UITableView()
     var addTaskButton = UIButton()
     var todoListVM = TodosListVM()
-    let barButton = UIBarButtonItem(title: "Sort",
-                                    style: .plain,
-                                    target: self,
-                                    action: #selector(sortTapped))
     
-    override func viewDidLayoutSubviews() {
+    override func viewWillAppear(_ animated: Bool) {
         prepareView()
+        reloadTable()
     }
 
     private func prepareView() {
         
-        title = AppTitle.listVCTitle.rawValue
-        todoListVM.delegate = self
+        let barButton = UIBarButtonItem(title: "Sort",
+                                        style: .plain,
+                                        target: self,
+                                        action: #selector(sortTapped))
 
         navigationItem.rightBarButtonItem = barButton
-        navigationItem.rightBarButtonItem?.tintColor = .black
-
+        prepareBarButton()
+        todoListVM.delegate = self
         // prepare ListTable
         view.addSubview(todolistTableView)
         todolistTableView.prepareLayout(.top)
@@ -49,7 +48,7 @@ class ToDoListVC: UIViewController {
         addTaskButton.backgroundColor = .black
         addTaskButton.cornerRadius(color: .lightGray)
         addTaskButton.setTitle(.addNew)
-        addTaskButton.addTarget(self, action: #selector(pressed),
+        addTaskButton.addTarget(self, action: #selector(addTaskAction),
                                 for: .touchUpInside)
         }
     
@@ -57,19 +56,35 @@ class ToDoListVC: UIViewController {
     
     @objc func sortTapped() {
 
-        let categories: [Categories] = [.DateCreated,.DateEdited,.Priority,.Completed,.Shedule,.Normal]
-        
-        let actionSheetController = UIAlertController(title: "Sort Task",
-                                                      message: nil,
+
+        if todoListVM.canSort  {
+
+            let alert = UIAlertController(title: "List Empty", message: "Add more than one tasks to catgories tasks", preferredStyle: UIAlertController.Style.alert)
+
+            let addNew = UIAlertAction(title: "Add New", style: .default, handler: { (action: UIAlertAction!) in
+                self.addTaskAction()
+            })
+            addNew.prepare()
+            let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction!) in })
+            cancel.prepare(color: .red)
+
+            alert.addAction(addNew)
+            alert.addAction(cancel)
+            present(alert, animated: true, completion: nil)
+            return
+        }
+
+        let actionSheetController = UIAlertController(title: "Select Category",
+                                                      message: "Sorting List Items by Selected Category",
                                                       preferredStyle: .actionSheet)
 
         
-        for type in categories {
-            let style : UIAlertAction.Style = type == .Normal ? .cancel : .default
-            let action = UIAlertAction(title: type.rawValue,
+        for category in todoListVM.sortCategories {
+            let style : UIAlertAction.Style = category == .Normal ? .cancel : .default
+            let action = UIAlertAction(title: category.rawValue,
                                        style:style ) { action -> Void in
-                guard type != .Normal else { return }
-                self.todoListVM.sortList(by: type)
+                guard category != .Normal else { return }
+                self.todoListVM.sortList(by: category)
             }
             action.prepare()
             actionSheetController.addAction(action)
@@ -80,14 +95,14 @@ class ToDoListVC: UIViewController {
         present(actionSheetController, animated: true)
     }
     
-    @objc func pressed() {
+    @objc func addTaskAction() {
         
-        let ac = UIAlertController(title: "Enter answer",
+        let ac = UIAlertController(title: "Task Name",
                                    message: nil,
                                    preferredStyle: .alert)
         ac.addTextField()
 
-        let submitAction = UIAlertAction(title: "Submit", style: .default) { [unowned ac] _ in
+        let submitAction = UIAlertAction(title: "Add", style: .default) { [unowned ac] _ in
             guard let text = ac.textFields![0].text,!text.isEmpty else {
                 return
             }
@@ -101,8 +116,12 @@ class ToDoListVC: UIViewController {
     
     func reloadTable(animation: Bool = true){
 
-        navigationItem.rightBarButtonItem = todoListVM.isEmpty ? nil : barButton
-
+        if todoListVM.sortType != .Normal{
+            navigationItem.rightBarButtonItem?.title = "Category - " + todoListVM.sortType.rawValue
+        } else {
+            navigationItem.rightBarButtonItem?.title = "Category"
+        }
+        
         guard animation else {
             todolistTableView.reloadData()
             return
@@ -135,6 +154,7 @@ extension ToDoListVC: UITableViewDelegate,UITableViewDataSource {
         todoListVM.items[indexPath.row].index = indexPath.row
         vc.todoItem = todoListVM.items[indexPath.row]
         vc.delegate = self
+        todoListVM.sortType = .Normal
         navigationController?.pushViewController(vc, animated: true)
     }
 }
