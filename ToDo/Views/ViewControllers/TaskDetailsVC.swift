@@ -2,7 +2,7 @@
 //  ItemDetailsVC.swift
 //  ToDo
 //
-//  Created by Godwin  on 31/12/20.
+//  Created by Godwin  on 30/12/20.
 //
 
 import UIKit
@@ -13,9 +13,10 @@ protocol DetailsVCDelegate: AnyObject {
 }
 
 
-class ItemDetailsVC: UIViewController{
+class TaskDetailsVC: UIViewController{
 
     
+    // MARK: - Properties
     let backgroundView = UIView()
     let createdLabel = UILabel()
     let sheduleLabel = UILabel()
@@ -31,14 +32,15 @@ class ItemDetailsVC: UIViewController{
     var todoItem: ToDoModel!
     weak var delegate:DetailsVCDelegate?
     
-    
+
+    // MARK: - Methods
     override func viewDidLoad() {
         prepareView()
         prepareData()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        
+        // call delegate when user wants to get back or delete the task
         if isDeletePressed {
             delegate?.delete(item: todoItem)
         } else {
@@ -48,7 +50,8 @@ class ItemDetailsVC: UIViewController{
     
     
     private func prepareView() {
-        
+        // Prepare Ui properties Constraints and positions
+
         
         // prepare ListTable
         view.addSubview(backgroundView)
@@ -129,9 +132,11 @@ class ItemDetailsVC: UIViewController{
 
     
     func prepareData() {
-        
+        // prepare Data of Details Screen and Ui Properties
+
         guard let data = todoItem else { return }
         
+        // show title screen when task name less than 5 character
         title = data.title.count > 5 ? "\(String(data.title.prefix(5)))..." : String(data.title.prefix(5))
         datePicker.date = data.sheduleTime
         titleText.text = data.title
@@ -146,26 +151,26 @@ class ItemDetailsVC: UIViewController{
     
     
     @objc func textFieldDidChange(textField: UITextField){
-
+        // change task name when editing textUI
         guard let text = titleText.text,!text.isEmpty else { return }
         todoItem.title = text
     }
     
     @objc func importantPressed(){
-        
+        // change Task state Prioritize and text UI
         todoItem.isImportant = !todoItem.isImportant
         importantButton.changeState(button: .Important,
                                     isEnable: !todoItem.isImportant)
     }
     
     @objc func deletePressed(){
-        
+        // assign closing state when user delete the task and get back to previous screen
         isDeletePressed = true
         navigationController?.popViewController(animated: true)
     }
     
     @objc func completePressed(){
-        
+        // change Task state complete and text UI
         todoItem.isDone = !todoItem.isDone
         completedButton.changeState(button: .Complete,
                                     isEnable: !todoItem.isDone)
@@ -175,34 +180,36 @@ class ItemDetailsVC: UIViewController{
     }
     
     @objc func timeChanged(_ sender: UIDatePicker) {
+        // Get the selcted time from date picker when user changing date and time
         todoItem.sheduleTime = sender.date
         todoItem.isSheduled = true
         sheduleButton.changeState(button: .Shedule,
                                     isEnable: false)
-//        let components = Calendar.current.dateComponents([.hour, .minute], from: sender.date)
-//        if let minute = components.minute, let hour = components.hour {
-//            print("\(minute) \(hour)")
-//        }
     }
     
     
+    // MARK: - When user Enable and disable Shedule Task
     @objc func sheduleIconPressed(){
         
         if !todoItem.isSheduled {
+            // assign Shedule time as one hour extra from current
             todoItem.sheduleTime = Calendar.current.date(byAdding: .hour,
                                                          value: 1,
                                                          to: Date())!
             datePicker.setDate(todoItem.sheduleTime, animated: true)
-            sheduleButton.changeState(button: .Shedule, isEnable: false)
 
         } else {
+            // assign Shedule time as created time when State Off
             todoItem.sheduleTime = todoItem.createdTime
-            sheduleButton.changeState(button: .Shedule, isEnable: true)
         }
+
+        // changing task shedule State On/Off
+        sheduleButton.changeState(button: .Shedule, isEnable: todoItem.isSheduled)
         todoItem.isSheduled = !todoItem.isSheduled
     }
     
     
+    // MARK: - To get the height of Navigation bar to assign title top spacing
     func topbarHeight() -> CGFloat {
         return UIApplication.shared.statusBarFrame.height + navigationController!.navigationBar.frame.height
     }

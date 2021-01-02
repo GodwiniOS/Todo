@@ -2,24 +2,26 @@
 //  ToDoListVC.swift
 //  ToDo
 //
-//  Created by Godwin  on 31/12/20.
+//  Created by Godwin  on 30/12/20.
 //
 
 import UIKit
 
 class ToDoListVC: UIViewController {
 
+    // MARK: - Properties
     var todolistTableView = UITableView()
     var addTaskButton = UIButton()
     var todoListVM = TodosListVM()
     
+    // MARK: - Methods
     override func viewWillAppear(_ animated: Bool) {
         prepareView()
         reloadTable()
     }
 
     private func prepareView() {
-        
+        // Prepare Ui properties Constraints and positions
         let barButton = UIBarButtonItem(title: "Sort",
                                         style: .plain,
                                         target: self,
@@ -28,6 +30,7 @@ class ToDoListVC: UIViewController {
         navigationItem.rightBarButtonItem = barButton
         prepareBarButton()
         todoListVM.delegate = self
+        
         // prepare ListTable
         view.addSubview(todolistTableView)
         todolistTableView.prepareLayout(.top)
@@ -56,9 +59,10 @@ class ToDoListVC: UIViewController {
     
     @objc func sortTapped() {
 
-
+        // action when user clicking category tasks
         if todoListVM.canSort  {
 
+            // showing alert when tasks are less than two count
             let alert = UIAlertController(title: "List Empty", message: "Add more than one tasks to catgories tasks", preferredStyle: UIAlertController.Style.alert)
 
             let addNew = UIAlertAction(title: "Add New", style: .default, handler: { (action: UIAlertAction!) in
@@ -74,16 +78,18 @@ class ToDoListVC: UIViewController {
             return
         }
 
+        // showing choices of categories tasks by user Input
+
         let actionSheetController = UIAlertController(title: "Select Category",
                                                       message: "Sorting List Items by Selected Category",
                                                       preferredStyle: .actionSheet)
 
         
         for category in todoListVM.sortCategories {
-            let style : UIAlertAction.Style = category == .Normal ? .cancel : .default
+            let style : UIAlertAction.Style = category == .Default ? .cancel : .default
             let action = UIAlertAction(title: category.rawValue,
                                        style:style ) { action -> Void in
-                guard category != .Normal else { return }
+                guard category != .Default else { return }
                 self.todoListVM.sortList(by: category)
             }
             action.prepare()
@@ -97,6 +103,7 @@ class ToDoListVC: UIViewController {
     
     @objc func addTaskAction() {
         
+        // showing floating text field to get the name of the task
         let ac = UIAlertController(title: "Task Name",
                                    message: nil,
                                    preferredStyle: .alert)
@@ -115,17 +122,21 @@ class ToDoListVC: UIViewController {
     }
     
     func reloadTable(animation: Bool = true){
-
-        if todoListVM.sortType != .Normal{
+        
+        // changing category input button title whenever user reloading table while current checking sorting stype
+        if todoListVM.sortType != .Default{
             navigationItem.rightBarButtonItem?.title = "Category - " + todoListVM.sortType.rawValue
         } else {
             navigationItem.rightBarButtonItem?.title = "Category"
         }
         
+        // reloading ToDo items list table when user changing state of tasks prperties
         guard animation else {
+            // without animation
             todolistTableView.reloadData()
             return
         }
+        // with animation
         UIView.transition(with: todolistTableView,
                           duration: 0.5,
                           options: .transitionCrossDissolve,
@@ -143,18 +154,15 @@ extension ToDoListVC: UITableViewDelegate,UITableViewDataSource {
     func tableView(_ tableView: UITableView,
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let todoItemTVC = ToDoTableViewCell()
-        todoItemTVC.prepareTableViewCell()
         todoItemTVC.delegate = self
         todoItemTVC.prepareData(todoItem: todoListVM.items[indexPath.row], index: indexPath.row)
         return todoItemTVC
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vc = ItemDetailsVC()
-        todoListVM.items[indexPath.row].index = indexPath.row
-        vc.todoItem = todoListVM.items[indexPath.row]
+        let vc = TaskDetailsVC()
+        vc.todoItem = todoListVM.prepareDetails(index: indexPath.row)
         vc.delegate = self
-        todoListVM.sortType = .Normal
         navigationController?.pushViewController(vc, animated: true)
     }
 }

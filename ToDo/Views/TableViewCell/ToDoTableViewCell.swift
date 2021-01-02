@@ -2,7 +2,7 @@
 //  ToDoTableViewCell.swift
 //  ToDo
 //
-//  Created by Godwin  on 31/12/20.
+//  Created by Godwin  on 30/12/20.
 //
 
 import UIKit
@@ -26,6 +26,16 @@ class ToDoTableViewCell: UITableViewCell {
     
     var index : Int!
     weak var delegate : ToDoTVCDelegate?
+    
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        prepareTableViewCell()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     func prepareTableViewCell() {
         

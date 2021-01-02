@@ -2,7 +2,7 @@
 //  AppConstants.swift
 //  ToDo
 //
-//  Created by Godwin  on 02/01/21.
+//  Created by Godwin  on 30/12/20.
 //
 
 import UIKit
@@ -21,7 +21,7 @@ enum Categories: String {
     case Priority   = "Important"
     case Completed  = "Completed"
     case Shedule    = "Shedule"
-    case Normal = "Cancel"
+    case Default = "Cancel"
 }
 
 enum AppTitle: String {

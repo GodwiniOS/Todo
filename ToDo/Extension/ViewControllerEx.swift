@@ -2,15 +2,15 @@
 //  ViewControllerEx.swift
 //  ToDo
 //
-//  Created by Godwin  on 02/01/21.
+//  Created by Godwin  on 30/12/20.
 //
 
 import UIKit
 
 
 extension UIViewController {
+    
     func prepareBarButton()  {
-        
         title = "List"
         
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.clear]
