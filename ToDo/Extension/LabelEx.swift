@@ -7,38 +7,6 @@
 import UIKit
 
 
-enum FontSize: CGFloat {
-    
-    case title = 16
-    case subtite = 10
-}
-
-enum FontName: String {
-    
-    case Light      = "HelveticaNeue-Light"
-    case Regular    = "HelveticaNeue-Regular"
-    case Medium     = "HelveticaNeue-SemiBold"
-    case Bold       = "HelveticaNeue-Bold"
-}
-
-
-enum AppImage: String {
-    
-    case importance = "Importance"
-    case sheduleOff = "SheduleOff"
-    case sheduleOn  = "SheduleOn"
-    case importatant    = "Importatant"
-    case completed      = "Completed"
-    case complete       = "Complete"
-}
-
-enum AppButton: String {
-    
-    case complete
-    case important
-    case shedule
-}
-
 extension UILabel{
 
     func prepareTextField(size: FontSize) {
@@ -55,6 +23,7 @@ extension UILabel{
 
 
 extension UITextField{
+    
     func strikeThrough(enable: Bool) {
         
         if enable {

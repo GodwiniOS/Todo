@@ -29,7 +29,6 @@ class ToDoTableViewCell: UITableViewCell {
     
     func prepareTableViewCell() {
         
-        
         // prepare Background
         backgroundColor = .clear
         selectionStyle = .none
@@ -44,17 +43,15 @@ class ToDoTableViewCell: UITableViewCell {
         backGroundView.prepareLayout(.bottom)
         backGroundView.cornerRadius(color: .lightGray)
 
-        
         // prepare completedButton
         backGroundView.addSubview(completedButton)
         completedButton.prepareLayout(.leading,constant: 15)
         completedButton.prepareLayout(.top,constant: 10)
         completedButton.prepareHeight(constant: 30)
         completedButton.prepareWidth(constant: 30)
-        completedButton.setImage(name: .complete)
+        completedButton.setImage(name: .Complete)
         completedButton.addTarget(self, action: #selector(completeTapped),
                                 for: .touchUpInside)
-        
         
         // prepare importantButton
         backGroundView.addSubview(importantButton)
@@ -62,11 +59,10 @@ class ToDoTableViewCell: UITableViewCell {
         importantButton.prepareLayout(.top,constant: 10)
         importantButton.prepareHeight(constant: 30)
         importantButton.prepareWidth(constant: 30)
-        importantButton.setImage(name: .importatant)
+        importantButton.setImage(name: .Important)
         importantButton.addTarget(self,
                                   action: #selector(importantTapped),
                                 for: .touchUpInside)
-        
         
         // prepare Title label
         backGroundView.addSubview(titleLabel)
@@ -81,7 +77,7 @@ class ToDoTableViewCell: UITableViewCell {
         sheduleIcon.prepareLayout(.bottom,constant: -8)
         sheduleIcon.prepareHeight(constant: 10)
         sheduleIcon.prepareWidth(constant: 10)
-        sheduleIcon.image = UIImage(named: AppImage.sheduleOn.rawValue)
+        sheduleIcon.image = UIImage(named: AppButton.Shedule.imageName())
         
         // prepare Title label
         backGroundView.addSubview(subTitlelabel)
@@ -98,8 +94,8 @@ class ToDoTableViewCell: UITableViewCell {
         subTitlelabel.text = todoItem.sheduleTime.time()
         subTitlelabel.isHidden = !todoItem.isSheduled
         sheduleIcon.isHidden = !todoItem.isSheduled
-        completedButton.setImage(name: todoItem.isDone ? .completed : .complete)
-        importantButton.setImage(name: todoItem.isImportant ? .importance : .importatant)
+        completedButton.changeState(button: .Complete, isEnable: !todoItem.isDone)
+        importantButton.changeState(button: .Important,isEnable: !todoItem.isImportant)
     }
     
     @objc func completeTapped() {

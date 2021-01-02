@@ -11,42 +11,44 @@ class ToDoListVC: UIViewController {
 
     var todolistTableView = UITableView()
     var addTaskButton = UIButton()
-    var todoItemList = TodosList()
-
+    var todoListVM = TodosListVM()
+    let barButton = UIBarButtonItem(title: "Sort",
+                                    style: .plain,
+                                    target: self,
+                                    action: #selector(sortTapped))
+    
     override func viewDidLayoutSubviews() {
         prepareView()
     }
 
     private func prepareView() {
         
-        title = "To Do List"
-        todoItemList.delegate = self
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Sort",
-                                                            style: .plain,
-                                                            target: self,
-                                                            action: #selector(sortTapped))
+        title = AppTitle.listVCTitle.rawValue
+        todoListVM.delegate = self
+
+        navigationItem.rightBarButtonItem = barButton
         navigationItem.rightBarButtonItem?.tintColor = .black
 
         // prepare ListTable
         view.addSubview(todolistTableView)
         todolistTableView.prepareLayout(.top)
-        todolistTableView.prepareLayout(.bottom)
+        todolistTableView.prepareLayout(.bottom,constant: -80)
         todolistTableView.prepareLayout(.leading)
         todolistTableView.prepareLayout(.trailing)
-        todolistTableView.register(ToDoTableViewCell.self, forCellReuseIdentifier: "DefaultCell")
+        todolistTableView.registerCell()
         todolistTableView.delegate = self
         todolistTableView.dataSource = self
         todolistTableView.separatorStyle = .none
         
         // prepare ListTable
         view.addSubview(addTaskButton)
-        addTaskButton.prepareLayout(.bottom,constant: -10)
+        addTaskButton.prepareLayout(.bottom,constant: -20)
         addTaskButton.prepareLayout(.leading,constant: 10)
         addTaskButton.prepareLayout(.trailing,constant: -10)
         addTaskButton.prepareHeight(constant: 60)
         addTaskButton.backgroundColor = .black
         addTaskButton.cornerRadius(color: .lightGray)
-        addTaskButton.setTitle("Add New", for: .normal)
+        addTaskButton.setTitle(.addNew)
         addTaskButton.addTarget(self, action: #selector(pressed),
                                 for: .touchUpInside)
         }
@@ -55,7 +57,7 @@ class ToDoListVC: UIViewController {
     
     @objc func sortTapped() {
 
-        let categories: [Categories] = [.dateCreated,.dateEdited,.priority,.completed,.shedule,.normal]
+        let categories: [Categories] = [.DateCreated,.DateEdited,.Priority,.Completed,.Shedule,.Normal]
         
         let actionSheetController = UIAlertController(title: "Sort Task",
                                                       message: nil,
@@ -63,11 +65,11 @@ class ToDoListVC: UIViewController {
 
         
         for type in categories {
-            let style : UIAlertAction.Style = type == .normal ? .cancel : .default
+            let style : UIAlertAction.Style = type == .Normal ? .cancel : .default
             let action = UIAlertAction(title: type.rawValue,
                                        style:style ) { action -> Void in
-                guard type != .normal else { return }
-                self.todoItemList.sortList(by: type)
+                guard type != .Normal else { return }
+                self.todoListVM.sortList(by: type)
             }
             action.prepare()
             actionSheetController.addAction(action)
@@ -89,15 +91,22 @@ class ToDoListVC: UIViewController {
             guard let text = ac.textFields![0].text,!text.isEmpty else {
                 return
             }
-            self.todoItemList.addNew(text: text)
-            self.reloadTabe()
+            self.todoListVM.addNew(text: text)
+            self.reloadTable()
         }
         submitAction.setValue(UIColor.black, forKey: "titleTextColor")
         ac.addAction(submitAction)
         present(ac, animated: true)
     }
     
-    func reloadTabe(){
+    func reloadTable(animation: Bool = true){
+
+        navigationItem.rightBarButtonItem = todoListVM.isEmpty ? nil : barButton
+
+        guard animation else {
+            todolistTableView.reloadData()
+            return
+        }
         UIView.transition(with: todolistTableView,
                           duration: 0.5,
                           options: .transitionCrossDissolve,
@@ -109,7 +118,7 @@ class ToDoListVC: UIViewController {
 extension ToDoListVC: UITableViewDelegate,UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        todoItemList.count
+        todoListVM.count
     }
     
     func tableView(_ tableView: UITableView,
@@ -117,37 +126,36 @@ extension ToDoListVC: UITableViewDelegate,UITableViewDataSource {
         let todoItemTVC = ToDoTableViewCell()
         todoItemTVC.prepareTableViewCell()
         todoItemTVC.delegate = self
-        todoItemTVC.prepareData(todoItem: todoItemList.items[indexPath.row], index: indexPath.row)
+        todoItemTVC.prepareData(todoItem: todoListVM.items[indexPath.row], index: indexPath.row)
         return todoItemTVC
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = ItemDetailsVC()
-        todoItemList.items[indexPath.row].index = indexPath.row
-        vc.todoItem = todoItemList.items[indexPath.row]
+        todoListVM.items[indexPath.row].index = indexPath.row
+        vc.todoItem = todoListVM.items[indexPath.row]
         vc.delegate = self
         navigationController?.pushViewController(vc, animated: true)
     }
 }
 
 
-
 extension ToDoListVC: ToDoTVCDelegate {
     func completeButtonClicked(index: Int) {
-        todoItemList.complete(index: index)
-        reloadTabe()
+        todoListVM.makeComplete(index: index)
+        reloadTable()
     }
     
     func importantButtonClicked(index: Int) {
-        todoItemList.importantTodo(index: index)
-        reloadTabe()
+        todoListVM.makeImportant(index: index)
+        reloadTable()
     }
 }
 
 
-extension ToDoListVC: kkk {
-    func kkk() {
-        reloadTabe()
+extension ToDoListVC: TodosListDelegate {
+    func reloadData() {
+        reloadTable(animation: false)
     }
 }
 
@@ -156,13 +164,13 @@ extension ToDoListVC: DetailsVCDelegate {
     
     func delete(item: ToDoModel) {
         guard let index = item.index else { return }
-        todoItemList.items.remove(at: index)
-        reloadTabe()
+        todoListVM.items.remove(at: index)
+        reloadTable(animation: false)
     }
     
     func saveChanges(item: ToDoModel) {
         guard let index = item.index else { return }
-        todoItemList.saveChanges(of: item, index: index)
-        reloadTabe()
+        todoListVM.items[index].saveChanges(of: item)
+        reloadTable()
     }
 }

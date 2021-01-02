@@ -9,14 +9,19 @@ import UIKit
 
 extension UIView {
     
-    func prepareLayout(_ attribute: NSLayoutConstraint.Attribute,constant: CGFloat = 0) {
+    func prepareLayout(_ attribute: NSLayoutConstraint.Attribute,
+                       toItem :UIView? = nil,
+                       constant: CGFloat = 0) {
         
         translatesAutoresizingMaskIntoConstraints = false
+        let withItem: UIView! =  toItem != nil ? toItem! : superview
+        let withAttribute: NSLayoutConstraint.Attribute! = toItem != nil ? .bottom : attribute
+
         let layout = NSLayoutConstraint(item: self,
                                         attribute: attribute,
                                         relatedBy: .equal,
-                                        toItem: superview,
-                                        attribute: attribute,
+                                        toItem: withItem,
+                                        attribute: withAttribute,
                                         multiplier: 1,
                                         constant: constant)
         NSLayoutConstraint.activate([layout])

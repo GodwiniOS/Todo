@@ -17,22 +17,21 @@ class ItemDetailsVC: UIViewController{
 
     
     let backgroundView = UIView()
-    let datePicker = UIDatePicker()
-
     let createdLabel = UILabel()
     let sheduleLabel = UILabel()
     let lastEditedLabel = UILabel()
-
-    var titleText = UITextField()
-    
+    let titleText = TextField()
+    let datePicker = UIDatePicker()
+    let deletebutton = UIButton()
+    let sheduleButton = UIButton()
     let completedButton = UIButton()
     let importantButton = UIButton()
-    let sheduleButton = UIButton()
     
-    let deletebutton = UIButton()
     var isDeletePressed = false
     var todoItem: ToDoModel!
     weak var delegate:DetailsVCDelegate?
+    
+    
     override func viewDidLoad() {
         prepareView()
         prepareData()
@@ -48,8 +47,8 @@ class ItemDetailsVC: UIViewController{
     }
     
     
-    
     private func prepareView() {
+        
         
         // prepare ListTable
         view.addSubview(backgroundView)
@@ -58,143 +57,94 @@ class ItemDetailsVC: UIViewController{
         backgroundView.prepareLayout(.leading)
         backgroundView.prepareLayout(.trailing)
         backgroundView.backgroundColor = .white
-        
+        navigationController?.navigationBar.tintColor = .black
+
         // prepare ListTable
-        view.addSubview(deletebutton)
-        deletebutton.prepareLayout(.bottom,constant: -10)
+        backgroundView.addSubview(deletebutton)
+        deletebutton.prepareLayout(.bottom,constant: -20)
         deletebutton.prepareLayout(.leading,constant: 10)
         deletebutton.prepareLayout(.trailing,constant: -10)
         deletebutton.prepareHeight(constant: 60)
         deletebutton.backgroundColor = .black
         deletebutton.cornerRadius(color: .lightGray)
-        deletebutton.setTitle("Delete task", for: .normal)
+        deletebutton.setTitle(.deleteTask)
         deletebutton.addTarget(self, action: #selector(deletePressed),
                                 for: .touchUpInside)
         
         
         // prepare ListTable
-        view.addSubview(titleText)
-        titleText.prepareLayout(.top,constant: 80)
+        backgroundView.addSubview(titleText)
+        titleText.prepareLayout(.top,constant: topbarHeight() + 10)
         titleText.prepareLayout(.leading,constant: 10)
         titleText.prepareLayout(.trailing,constant: -10)
         titleText.prepareHeight(constant: 40)
         titleText.cornerRadius(color: .black)
         titleText.addTarget(self, action: #selector(textFieldDidChange(textField:)), for: .editingChanged)
 
-        view.addSubview(importantButton)
+        backgroundView.addSubview(importantButton)
         importantButton.prepareLayout(.trailing, constant: -15)
-        importantButton.prepareLayout(.top,constant: 140)
+        importantButton.prepareLayout(.top,toItem: titleText,constant: 20)
         importantButton.prepareHeight(constant: 30)
         importantButton.prepareWidth(constant: 30)
         importantButton.addTarget(self, action: #selector(importantPressed),
                                 for: .touchUpInside)
         
-        view.addSubview(completedButton)
+        backgroundView.addSubview(completedButton)
         completedButton.prepareLayout(.trailing, constant: -15)
-        completedButton.prepareLayout(.top,constant: 190)
+        completedButton.prepareLayout(.top,toItem: importantButton,constant: 20)
         completedButton.prepareHeight(constant: 30)
         completedButton.prepareWidth(constant: 30)
         completedButton.addTarget(self, action: #selector(completePressed),
                                 for: .touchUpInside)
         
-        
-        view.addSubview(sheduleButton)
+        backgroundView.addSubview(sheduleButton)
         sheduleButton.prepareLayout(.trailing, constant: -15)
-        sheduleButton.prepareLayout(.top,constant: 240)
+        sheduleButton.prepareLayout(.top,toItem: completedButton,constant: 20)
         sheduleButton.prepareHeight(constant: 35)
         sheduleButton.prepareWidth(constant: 35)
         sheduleButton.addTarget(self, action: #selector(sheduleIconPressed),
                                 for: .touchUpInside)
 
-        
         // prepare Title label
-        view.addSubview(createdLabel)
+        backgroundView.addSubview(createdLabel)
         createdLabel.prepareLayout(.leading,constant: 15)
-        createdLabel.prepareLayout(.top,constant: 150)
+        createdLabel.prepareLayout(.top,toItem: titleText,constant: 30)
         createdLabel.prepareTextField(size: .title)
-        createdLabel.text = "sfdsfsfs"
-
         
         // prepare Title label
-        view.addSubview(lastEditedLabel)
-        lastEditedLabel.prepareLayout(.top,constant: 200)
+        backgroundView.addSubview(lastEditedLabel)
+        lastEditedLabel.prepareLayout(.top,toItem: createdLabel,constant: 30)
         lastEditedLabel.prepareLayout(.leading,constant: 15)
         lastEditedLabel.prepareTextField(size: .title)
-        lastEditedLabel.text = "sfdsfsfs"
-        
-        
+                
         // Date
         datePicker.locale = .current
         datePicker.datePickerMode = .dateAndTime
 
         datePicker.addTarget(self, action: #selector(timeChanged), for: .valueChanged)
 
-        view.addSubview(datePicker)
+        backgroundView.addSubview(datePicker)
         datePicker.prepareLayout(.leading,constant: 10)
-        datePicker.prepareLayout(.top,constant: 250)
-    }
-
-    
-    @objc func timeChanged(_ sender: UIDatePicker) {
-        todoItem.sheduleTime = sender.date
-        todoItem.isSheduled = true
-        sheduleButton.changeState(button: .shedule,
-                                    isEnable: false)
-//        let components = Calendar.current.dateComponents([.hour, .minute], from: sender.date)
-//        if let minute = components.minute, let hour = components.hour {
-//            print("\(minute) \(hour)")
-//        }
-    }
-    
-    
-    @objc func importantPressed(){
-        todoItem.isImportant = !todoItem.isImportant
-        importantButton.changeState(button: .important,
-                                    isEnable: !todoItem.isImportant)
-    }
-    
-    @objc func completePressed(){
-        todoItem.isDone = !todoItem.isDone
-        completedButton.changeState(button: .complete,
-                                    isEnable: !todoItem.isDone)
-        titleText.isEnabled = !todoItem.isDone
-        titleText.strikeThrough(enable: todoItem.isDone)
-
-    }
-
-    @objc func sheduleIconPressed(){
         
-        if !todoItem.isSheduled {
-            todoItem.sheduleTime = Calendar.current.date(byAdding: .hour,
-                                                         value: 1,
-                                                         to: Date())!
-            datePicker.setDate(todoItem.sheduleTime, animated: true)
-            todoItem.isSheduled = true
-            sheduleButton.changeState(button: .shedule, isEnable: false)
+        datePicker.setValue(UIColor.red, forKeyPath: "textColor")
+        datePicker.setValue(UIColor.red, forKeyPath: "textColor")
 
-        } else {
-            todoItem.isSheduled = false
-            sheduleButton.changeState(button: .shedule, isEnable: true)
-        }
+        datePicker.prepareLayout(.top,toItem: lastEditedLabel,constant: 30)
     }
-    
-    @objc func deletePressed(){
-        isDeletePressed = true
-        navigationController?.popViewController(animated: true)
-    }
-    
+
     
     func prepareData() {
         
         guard let data = todoItem else { return }
         
-        
+        title = data.title.count > 5 ? "\(String(data.title.prefix(5)))..." : String(data.title.prefix(5))
         datePicker.date = data.sheduleTime
         titleText.text = data.title
-        completedButton.setImage(name: !data.isDone ? .complete : .completed)
-        importantButton.setImage(name: !data.isImportant ? .importatant : .importance)
-        sheduleButton.setImage(name: data.isSheduled ? .sheduleOn : .sheduleOff)
         
+        completedButton.changeState(button: .Complete,isEnable: !data.isDone)
+        importantButton.changeState(button: .Important,isEnable: !data.isImportant)
+        sheduleButton.changeState(button: .Shedule,isEnable: !data.isSheduled)
+
         createdLabel.text = "Creadted " + data.createdTime.time()
         lastEditedLabel.text = "Last Edited " + data.lastEditedTime.time()
     }
@@ -205,5 +155,59 @@ class ItemDetailsVC: UIViewController{
         guard let text = titleText.text,!text.isEmpty else { return }
         todoItem.title = text
     }
-}
+    
+    @objc func importantPressed(){
+        
+        todoItem.isImportant = !todoItem.isImportant
+        importantButton.changeState(button: .Important,
+                                    isEnable: !todoItem.isImportant)
+    }
+    
+    @objc func deletePressed(){
+        
+        isDeletePressed = true
+        navigationController?.popViewController(animated: true)
+    }
+    
+    @objc func completePressed(){
+        
+        todoItem.isDone = !todoItem.isDone
+        completedButton.changeState(button: .Complete,
+                                    isEnable: !todoItem.isDone)
+        titleText.isEnabled = !todoItem.isDone
+        titleText.strikeThrough(enable: todoItem.isDone)
 
+    }
+    
+    @objc func timeChanged(_ sender: UIDatePicker) {
+        todoItem.sheduleTime = sender.date
+        todoItem.isSheduled = true
+        sheduleButton.changeState(button: .Shedule,
+                                    isEnable: false)
+//        let components = Calendar.current.dateComponents([.hour, .minute], from: sender.date)
+//        if let minute = components.minute, let hour = components.hour {
+//            print("\(minute) \(hour)")
+//        }
+    }
+    
+    
+    @objc func sheduleIconPressed(){
+        
+        if !todoItem.isSheduled {
+            todoItem.sheduleTime = Calendar.current.date(byAdding: .hour,
+                                                         value: 1,
+                                                         to: Date())!
+            datePicker.setDate(todoItem.sheduleTime, animated: true)
+            sheduleButton.changeState(button: .Shedule, isEnable: false)
+
+        } else {
+            sheduleButton.changeState(button: .Shedule, isEnable: true)
+        }
+        todoItem.isSheduled = !todoItem.isSheduled
+    }
+    
+    
+    func topbarHeight() -> CGFloat {
+        return UIApplication.shared.statusBarFrame.height + navigationController!.navigationBar.frame.height
+    }
+}

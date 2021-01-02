@@ -1,52 +1,32 @@
 //
-//  ToDoModel.swift
+//  TodoListVM.swift
 //  ToDo
 //
-//  Created by Godwin  on 31/12/20.
+//  Created by Godwin  on 02/01/21.
 //
 
 import Foundation
 
-struct ToDoModel {
-    
-    var title: String
-    var isDone: Bool = false
-    var isImportant: Bool = false
-    var isSheduled: Bool = false
-    
-    var createdTime: Date = Date()
-    var lastEditedTime: Date = Date()
-    var sheduleTime: Date = Date()
-    var index: Int?
+
+protocol TodosListDelegate: AnyObject {
+    func reloadData()
 }
 
-enum Categories: String {
-    case dateCreated = "Created"
-    case dateEdited = "Last Edited"
-    case priority = "Important"
-    case completed = "Completed"
-    case shedule = "Shedule"
-    case normal = "Cancel"
-}
-
-protocol kkk: AnyObject {
-    func kkk()
-}
-
-class TodosList {
+class TodosListVM {
     
-    weak var delegate : kkk?
+    weak var delegate : TodosListDelegate?
     var items = [ToDoModel]()
     var count: Int { return items.count }
-    var sortType: Categories = .normal
+    var isEmpty: Bool { return items.isEmpty }
+    var sortType: Categories = .Normal
     
     func addNew(text: String) {
         let todoItem = ToDoModel(title: text)
         items.insert(todoItem, at: 0)
-        sortType = .normal
+        sortType = .Normal
     }
     
-    func importantTodo(index: Int) {
+    func makeImportant(index: Int) {
         var item = items[index]
         if item.isImportant {
             items[index].isImportant = false
@@ -59,7 +39,7 @@ class TodosList {
         }
     }
     
-    func complete(index: Int) {
+    func makeComplete(index: Int) {
         var item = items[index]
         if item.isDone {
             items[index].isDone = false
@@ -90,32 +70,21 @@ class TodosList {
     func sortList(by type:Categories) {
         var list = items
         switch type{
-        case .dateCreated:
+        case .DateCreated:
             list.sort { $0.createdTime < $1.createdTime }
-        case .dateEdited:
+        case .DateEdited:
             list.sort { $0.lastEditedTime > $1.lastEditedTime }
-        case .completed:
+        case .Completed:
             list.sort { $0.isDone && !$1.isDone }
-        case .priority:
+        case .Priority:
             list.sort { $0.isImportant && !$1.isImportant }
-        case .shedule:
+        case .Shedule:
             list.sort { $0.sheduleTime  < $1.sheduleTime }
         default: print("")
         }
         
         items = list
         sortType = type
-        delegate?.kkk()
-    }
-    
-    
-    func saveChanges(of item: ToDoModel,index: Int){
-        items[index].isSheduled = item.isSheduled
-        items[index].isDone = item.isDone
-        items[index].isImportant = item.isImportant
-        items[index].title = item.title
-        items[index].sheduleTime = item.sheduleTime
-        items[index].lastEditedTime = Date()
-        items[index].index = nil
+        delegate?.reloadData()
     }
 }
