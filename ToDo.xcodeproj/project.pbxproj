@@ -61,6 +61,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5A7B3D9A275A5AFD009C7257 /* Custom */ = {
+			isa = PBXGroup;
+			children = (
+				5AA7CFDE25A09FA9004B2FD1 /* TextField.swift */,
+			);
+			path = Custom;
+			sourceTree = "<group>";
+		};
 		5AA7CFD325A0937B004B2FD1 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -133,6 +141,7 @@
 				5AA7CFD325A0937B004B2FD1 /* Model */,
 				5AA7CFD825A093FC004B2FD1 /* Views */,
 				5AA7CFD425A0938D004B2FD1 /* ViewModel */,
+				5A7B3D9A275A5AFD009C7257 /* Custom */,
 				5AD8CA48259DB214005B79CC /* Delegate */,
 				5AD8CA4F259DCFC6005B79CC /* Extension */,
 				5AA7CFD625A093BD004B2FD1 /* AppConstants */,
@@ -157,10 +166,9 @@
 			children = (
 				5AD8CA5E259DE066005B79CC /* ViewEx.swift */,
 				5AD8CA5B259DD3BF005B79CC /* LabelEx.swift */,
+				5AA7CFDB25A09675004B2FD1 /* TableEx.swift */,
 				5AD8CA64259DFD29005B79CC /* ButtonEx.swift */,
 				5AD8CA6A259E404F005B79CC /* AlertActionEx.swift */,
-				5AA7CFDB25A09675004B2FD1 /* TableEx.swift */,
-				5AA7CFDE25A09FA9004B2FD1 /* TextField.swift */,
 				5AA7CFE125A0B531004B2FD1 /* ViewControllerEx.swift */,
 			);
 			path = Extension;
@@ -202,7 +210,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1220;
-				LastUpgradeCheck = 1220;
+				LastUpgradeCheck = 1310;
 				TargetAttributes = {
 					5AD8CA28259DAE8A005B79CC = {
 						CreatedOnToolsVersion = 12.2;
@@ -409,7 +417,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = ToDo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -430,7 +438,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = ToDo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
